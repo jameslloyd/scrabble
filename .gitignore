@@ -1,0 +1,14 @@
+# Python-related files
+__pycache__/
+*.pyc
+*.pyo
+*.sqlite3
+
+# Environment files
+.env
+
+# Logs
+*.log
+
+# Docker-related files
+scrabble_board.png

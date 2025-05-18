@@ -1,0 +1,2 @@
+pillow
+fastapi[standard]
