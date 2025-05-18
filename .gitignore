@@ -12,3 +12,5 @@ __pycache__/
 
 # Docker-related files
 scrabble_board.png
+
+.venv/

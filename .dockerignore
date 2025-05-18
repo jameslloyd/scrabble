@@ -6,3 +6,4 @@ __pycache__/
 .env
 *.png
 scrabble_board.png
+.venv/
