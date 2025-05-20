@@ -1,4 +1,4 @@
-#!/home/james/code/scrabble/.venv/bin/python
+#!/home/james/Docker/scrabble/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

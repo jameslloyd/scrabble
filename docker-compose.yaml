@@ -1,12 +1,10 @@
-version: "3.9"
 services:
   scrabble-api:
     build:
       context: .
       dockerfile: Dockerfile
+    image: jameslloyd/scrabble
     ports:
-      - "8000:8000"
-    volumes:
-      - ./scrabble_tiles:/app/scrabble_tiles:ro
+      - "8654:8000"
     environment:
       - PYTHONUNBUFFERED=1
