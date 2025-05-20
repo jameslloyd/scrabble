@@ -3,11 +3,9 @@ from scrabble_board import generate_scrabble_board_image
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, RedirectResponse
 from pydantic import BaseModel
-from word_validation import filter_valid_words
 
 app = FastAPI()
-app.title = "Scrabble Board Generator"
-app.description = "Generate a Scrabble board image from a list of words."
+app.title = "Sentiment Bot API"
 app.version = "0.1.0"
 
 SCRABBLE_SCORES = {
@@ -19,13 +17,33 @@ SCRABBLE_SCORES = {
     "Z": 10
 }
 
+def is_word_in_sowpods(word: str, sowpods_path: str = "sowpods.txt") -> bool:
+    """
+    Check if a word is present in the sowpods.txt file.
+
+    Args:
+        word (str): The word to check.
+        sowpods_path (str): Path to the sowpods.txt file.
+
+    Returns:
+        bool: True if the word is present, False otherwise.
+    """
+    word = word.strip().upper()
+    with open(sowpods_path, "r") as f:
+        for line in f:
+            if line.strip().upper() == word:
+                return True
+    return False
+
 def score_word(word: str) -> int:
-    return sum(SCRABBLE_SCORES.get(char.upper(), 0) for char in word)
+    if is_word_in_sowpods(word):
+        return sum(SCRABBLE_SCORES.get(char.upper(), 0) for char in word)
+    return 0
 
 def score_words(words: list[str]) -> list[dict]:
-    valid_set = set(filter_valid_words(words))
+
     scored = [
-        {"word": word, "score": score_word(word) if word in valid_set else 0}
+        {"word": word, "score": score_word(word) }
         for word in words
     ]
     return sorted(scored, key=lambda x: x["score"], reverse=True)
