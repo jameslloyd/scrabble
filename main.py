@@ -3,6 +3,7 @@ from scrabble_board import generate_scrabble_board_image
 from fastapi import FastAPI
 from fastapi.responses import FileResponse, RedirectResponse
 from pydantic import BaseModel
+from functools import lru_cache
 
 app = FastAPI()
 app.title = "Sentiment Bot API"
@@ -17,23 +18,18 @@ SCRABBLE_SCORES = {
     "Z": 10
 }
 
+@lru_cache(maxsize=1)
+def load_sowpods(sowpods_path: str = "sowpods.txt") -> set:
+    with open(sowpods_path, "r") as f:
+        return set(line.strip().upper() for line in f if line.strip())
+
 def is_word_in_sowpods(word: str, sowpods_path: str = "sowpods.txt") -> bool:
     """
-    Check if a word is present in the sowpods.txt file.
-
-    Args:
-        word (str): The word to check.
-        sowpods_path (str): Path to the sowpods.txt file.
-
-    Returns:
-        bool: True if the word is present, False otherwise.
+    Efficiently check if a word is present in the sowpods.txt file.
     """
     word = word.strip().upper()
-    with open(sowpods_path, "r") as f:
-        for line in f:
-            if line.strip().upper() == word:
-                return True
-    return False
+    sowpods_set = load_sowpods(sowpods_path)
+    return word in sowpods_set
 
 def score_word(word: str) -> int:
     if is_word_in_sowpods(word):
