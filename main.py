@@ -1,7 +1,7 @@
 from scrabble_layout import create_scrabble_layout
 from scrabble_board import generate_scrabble_board_image
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from pydantic import BaseModel
 from word_validation import filter_valid_words
 
@@ -53,3 +53,7 @@ def get_score(request: ScoreRequest):
     """
     scored_words = score_words(request.words)
     return {"results": scored_words}
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/docs")
